@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,35 +19,19 @@ public class GameManager : MonoBehaviour
         }
 
         // klik pojedynczej jednostki (tylko jeśli nie było drag)
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && !selectionManager.isDragging)
         {
-            if (!selectionManager.isDragging)
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+
+            UnitMovement unit = null;
+            if (hit.collider != null)
             {
-                Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
-
-                if (hit.collider != null)
-                {
-                    UnitMovement unit = hit.collider.GetComponent<UnitMovement>();
-
-                    if (unit != null)
-                    {
-                        ClearSelection();
-                        unit.Select();
-                        selectionManager.selectedUnits.Add(unit);
-                    }
-                }
+                unit = hit.collider.GetComponent<UnitMovement>();
             }
-        }
-    }
 
-    void ClearSelection()
-    {
-        foreach (var unit in selectionManager.selectedUnits)
-        {
-            unit.Deselect();
+            bool addToSelection = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+            selectionManager.SelectSingleUnit(unit, addToSelection);
         }
-
-        selectionManager.selectedUnits.Clear();
     }
 }
