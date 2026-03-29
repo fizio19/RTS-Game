@@ -7,9 +7,24 @@ public class SelectionManager : MonoBehaviour
     public RectTransform selectionBox;
 
     private Vector2 startPos;
+    private Rect currentSelectionRect;
+
+    private RectTransform selectionBoxParent;
+    private Canvas selectionCanvas;
+
     public bool isDragging = false;
 
     public List<UnitMovement> selectedUnits = new List<UnitMovement>();
+
+    void Awake()
+    {
+        if (selectionBox != null)
+        {
+            selectionBoxParent = selectionBox.parent as RectTransform;
+            selectionCanvas = selectionBox.GetComponentInParent<Canvas>();
+            selectionBox.gameObject.SetActive(false);
+        }
+    }
 
     void Update()
     {
@@ -17,6 +32,7 @@ public class SelectionManager : MonoBehaviour
         {
             startPos = Input.mousePosition;
             isDragging = false;
+            currentSelectionRect = new Rect();
         }
 
         if (Input.GetMouseButton(0))
@@ -24,8 +40,9 @@ public class SelectionManager : MonoBehaviour
             if (Vector2.Distance(startPos, Input.mousePosition) > 10f)
             {
                 isDragging = true;
+                currentSelectionRect = GetScreenRect(startPos, Input.mousePosition);
                 selectionBox.gameObject.SetActive(true);
-                UpdateBox(Input.mousePosition);
+                UpdateBoxVisual(currentSelectionRect);
             }
         }
 
@@ -41,22 +58,37 @@ public class SelectionManager : MonoBehaviour
         }
     }
 
-    void UpdateBox(Vector2 currentMousePos)
+    void UpdateBoxVisual(Rect screenRect)
     {
-        Vector2 size = currentMousePos - startPos;
+        if (selectionBox == null || selectionBoxParent == null)
+        {
+            return;
+        }
 
-        selectionBox.position = startPos;
+        Camera uiCamera = null;
+        if (selectionCanvas != null && selectionCanvas.renderMode != RenderMode.ScreenSpaceOverlay)
+        {
+            uiCamera = selectionCanvas.worldCamera;
+        }
+
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(selectionBoxParent, screenRect.min, uiCamera, out var localMin);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(selectionBoxParent, screenRect.max, uiCamera, out var localMax);
+
+        Vector2 size = localMax - localMin;
+        Vector2 center = (localMin + localMax) * 0.5f;
+
+        selectionBox.anchoredPosition = center;
         selectionBox.sizeDelta = new Vector2(Mathf.Abs(size.x), Mathf.Abs(size.y));
+    }
 
-        if (size.x < 0)
-        {
-            selectionBox.position = new Vector2(currentMousePos.x, selectionBox.position.y);
-        }
+    Rect GetScreenRect(Vector2 pointA, Vector2 pointB)
+    {
+        float xMin = Mathf.Min(pointA.x, pointB.x);
+        float yMin = Mathf.Min(pointA.y, pointB.y);
+        float xMax = Mathf.Max(pointA.x, pointB.x);
+        float yMax = Mathf.Max(pointA.y, pointB.y);
 
-        if (size.y < 0)
-        {
-            selectionBox.position = new Vector2(selectionBox.position.x, currentMousePos.y);
-        }
+        return Rect.MinMaxRect(xMin, yMin, xMax, yMax);
     }
 
     public void SelectUnitsInBox(bool addToSelection)
@@ -68,9 +100,13 @@ public class SelectionManager : MonoBehaviour
 
         foreach (var unit in FindObjectsOfType<UnitMovement>())
         {
-            Vector2 screenPos = Camera.main.WorldToScreenPoint(unit.transform.position);
+            Vector3 screenPoint = Camera.main.WorldToScreenPoint(unit.transform.position);
+            if (screenPoint.z < 0f)
+            {
+                continue;
+            }
 
-            if (IsInside(screenPos) && !selectedUnits.Contains(unit))
+            if (currentSelectionRect.Contains(screenPoint) && !selectedUnits.Contains(unit))
             {
                 unit.Select();
                 selectedUnits.Add(unit);
@@ -119,19 +155,5 @@ public class SelectionManager : MonoBehaviour
         }
 
         selectedUnits.Clear();
-    }
-
-    bool IsInside(Vector2 screenPos)
-    {
-        Vector2 boxPos = selectionBox.position;
-
-        Vector2 min = boxPos;
-        Vector2 max = boxPos + selectionBox.sizeDelta;
-
-        if (min.x > max.x) (min.x, max.x) = (max.x, min.x);
-        if (min.y > max.y) (min.y, max.y) = (max.y, min.y);
-
-        return screenPos.x >= min.x && screenPos.x <= max.x &&
-               screenPos.y >= min.y && screenPos.y <= max.y;
     }
 }
