@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
 public class SelectionManager : MonoBehaviour
 {
     public RectTransform selectionBox;
+
     private Vector2 startPos;
     public bool isDragging = false;
 
@@ -32,7 +33,8 @@ public class SelectionManager : MonoBehaviour
         {
             if (isDragging)
             {
-                SelectUnits();
+                bool addToSelection = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+                SelectUnitsInBox(addToSelection);
             }
 
             selectionBox.gameObject.SetActive(false);
@@ -47,13 +49,69 @@ public class SelectionManager : MonoBehaviour
         selectionBox.sizeDelta = new Vector2(Mathf.Abs(size.x), Mathf.Abs(size.y));
 
         if (size.x < 0)
+        {
             selectionBox.position = new Vector2(currentMousePos.x, selectionBox.position.y);
+        }
 
         if (size.y < 0)
+        {
             selectionBox.position = new Vector2(selectionBox.position.x, currentMousePos.y);
+        }
     }
 
-    void SelectUnits()
+    public void SelectUnitsInBox(bool addToSelection)
+    {
+        if (!addToSelection)
+        {
+            ClearSelection();
+        }
+
+        foreach (var unit in FindObjectsOfType<UnitMovement>())
+        {
+            Vector2 screenPos = Camera.main.WorldToScreenPoint(unit.transform.position);
+
+            if (IsInside(screenPos) && !selectedUnits.Contains(unit))
+            {
+                unit.Select();
+                selectedUnits.Add(unit);
+            }
+        }
+    }
+
+    public void SelectSingleUnit(UnitMovement unit, bool addToSelection)
+    {
+        if (unit == null)
+        {
+            if (!addToSelection)
+            {
+                ClearSelection();
+            }
+
+            return;
+        }
+
+        if (addToSelection)
+        {
+            if (selectedUnits.Contains(unit))
+            {
+                unit.Deselect();
+                selectedUnits.Remove(unit);
+            }
+            else
+            {
+                unit.Select();
+                selectedUnits.Add(unit);
+            }
+
+            return;
+        }
+
+        ClearSelection();
+        unit.Select();
+        selectedUnits.Add(unit);
+    }
+
+    public void ClearSelection()
     {
         foreach (var unit in selectedUnits)
         {
@@ -61,17 +119,6 @@ public class SelectionManager : MonoBehaviour
         }
 
         selectedUnits.Clear();
-
-        foreach (var unit in FindObjectsOfType<UnitMovement>())
-        {
-            Vector2 screenPos = Camera.main.WorldToScreenPoint(unit.transform.position);
-
-            if (IsInside(screenPos))
-            {
-                unit.Select();
-                selectedUnits.Add(unit);
-            }
-        }
     }
 
     bool IsInside(Vector2 screenPos)
