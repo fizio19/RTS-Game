@@ -4,6 +4,7 @@ public class BuildingPlacer : MonoBehaviour
 {
     public static BuildingPlacer Instance;
     public static int inputLockFrame = -1;
+    public static bool consumeNextLeftMouseUp = false;
 
     public BuildingData selectedBuilding;
     public bool isPlacingBuilding = false;
@@ -41,6 +42,7 @@ public class BuildingPlacer : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             inputLockFrame = Time.frameCount;
+            consumeNextLeftMouseUp = true;
 
             if (canBuild)
                 TryPlaceBuilding();
@@ -135,14 +137,12 @@ public class BuildingPlacer : MonoBehaviour
             }
         }
 
-        // opóźnione wyjście z trybu budowy
-        Invoke(nameof(FinishBuildingPlacement), 0.05f);
-    }
-
-    void FinishBuildingPlacement()
-    {
-        CancelBuilding();
-        isPlacingBuilding = false;
+        bool keepPlacing = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+        if (!keepPlacing)
+        {
+            CancelBuilding();
+            isPlacingBuilding = false;
+        }
     }
 
     void DestroyPreview()

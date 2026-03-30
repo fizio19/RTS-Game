@@ -51,6 +51,13 @@ public class SelectionManager : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
+            if (BuildingPlacer.consumeNextLeftMouseUp)
+            {
+                BuildingPlacer.consumeNextLeftMouseUp = false;
+                selectionBox.gameObject.SetActive(false);
+                return;
+            }
+
             bool add = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
 
             if (isDragging)

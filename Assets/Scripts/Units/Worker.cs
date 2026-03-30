@@ -22,6 +22,8 @@ public class Worker : MonoBehaviour
     private Vector3 currentTarget;
     private bool hasMoveTarget;
 
+    private float gatherTimer;
+
     private void Awake()
     {
         movement = GetComponent<UnitMovement>();
@@ -51,6 +53,7 @@ public class Worker : MonoBehaviour
 
         targetResource = resource;
         isGathering = true;
+        gatherTimer = 0f;
     }
 
     public void StartBuilding(BuildingData data, Vector3 position)
@@ -69,7 +72,6 @@ public class Worker : MonoBehaviour
     {
         float distance = Vector2.Distance(transform.position, buildPosition);
 
-        // zwiêkszamy zasiêg (wa¿ne)
         if (distance > 2.5f)
         {
             MoveOnce(buildPosition);
@@ -114,11 +116,34 @@ public class Worker : MonoBehaviour
 
         hasMoveTarget = false;
 
-        int gathered = targetResource.Harvest((int)unitData.gatherRate);
+        gatherTimer += Time.deltaTime;
+        if (gatherTimer < 1f)
+            return;
+
+        gatherTimer -= 1f;
+
+        int gatherPerSecond = Mathf.Max(1, Mathf.RoundToInt(unitData.gatherRate));
+        int carryCapacity = Mathf.Max(1, Mathf.RoundToInt(unitData.carryCapacity));
+        int missingCapacity = Mathf.Max(0, carryCapacity - carriedAmount);
+
+        if (missingCapacity <= 0)
+        {
+            isGathering = false;
+            FindDropOff();
+            return;
+        }
+
+        int gathered = targetResource.Harvest(Mathf.Min(gatherPerSecond, missingCapacity));
+        if (gathered <= 0)
+        {
+            StopWork();
+            return;
+        }
+
         carriedAmount += gathered;
         carriedType = targetResource.resourceType;
 
-        if (carriedAmount >= unitData.carryCapacity)
+        if (carriedAmount >= carryCapacity)
         {
             isGathering = false;
             FindDropOff();
@@ -127,7 +152,20 @@ public class Worker : MonoBehaviour
 
     private void FindDropOff()
     {
-        targetDropOff = FindObjectOfType<DropOffPoint>();
+        DropOffPoint[] dropOffs = FindObjectsOfType<DropOffPoint>();
+
+        targetDropOff = null;
+        float minDistance = float.MaxValue;
+
+        foreach (DropOffPoint dropOff in dropOffs)
+        {
+            float distance = Vector2.Distance(transform.position, dropOff.transform.position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                targetDropOff = dropOff;
+            }
+        }
 
         if (targetDropOff == null)
         {
@@ -162,7 +200,7 @@ public class Worker : MonoBehaviour
 
         carriedAmount = 0;
 
-        if (targetResource == null)
+        if (targetResource == null || targetResource.amount <= 0)
         {
             StopWork();
             return;
@@ -170,6 +208,7 @@ public class Worker : MonoBehaviour
 
         isReturning = false;
         isGathering = true;
+        gatherTimer = 0f;
     }
 
     private void MoveOnce(Vector3 target)
@@ -195,6 +234,7 @@ public class Worker : MonoBehaviour
         buildingToBuild = null;
 
         hasMoveTarget = false;
+        gatherTimer = 0f;
     }
 
     public void StopWorkExternal()
@@ -208,5 +248,6 @@ public class Worker : MonoBehaviour
         targetResource = null;
         targetDropOff = null;
         buildingToBuild = null;
+        gatherTimer = 0f;
     }
 }
