@@ -7,6 +7,12 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (BuildingPlacer.inputLockFrame == Time.frameCount)
+            return;
+
+        if (BuildingPlacer.Instance != null && BuildingPlacer.Instance.selectedBuilding != null)
+            return;
+
         if (Input.GetMouseButtonDown(1))
         {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
