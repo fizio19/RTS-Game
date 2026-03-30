@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -6,32 +7,41 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        // PPM = ruch
         if (Input.GetMouseButtonDown(1))
-        {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePos.z = 0;
-
-            foreach (var unit in selectionManager.selectedUnits)
-            {
-                unit.MoveTo(mousePos);
-            }
-        }
-
-        // klik pojedynczej jednostki (tylko jeśli nie było drag)
-        if (Input.GetMouseButtonUp(0) && !selectionManager.isDragging)
         {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
-            UnitMovement unit = null;
-            if (hit.collider != null)
-            {
-                unit = hit.collider.GetComponent<UnitMovement>();
-            }
+            if (hit.collider == null || hit.collider.gameObject.layer != LayerMask.NameToLayer("Ground"))
+                return;
 
-            bool addToSelection = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-            selectionManager.SelectSingleUnit(unit, addToSelection);
+            Vector3 target = hit.point;
+            target.z = 0;
+
+            MoveInFormation(target);
+        }
+    }
+
+    void MoveInFormation(Vector3 target)
+    {
+        List<UnitMovement> units = selectionManager.selectedUnits;
+
+        int count = units.Count;
+        if (count == 0) return;
+
+        int columns = Mathf.CeilToInt(Mathf.Sqrt(count));
+        float spacing = 0.5f;
+
+        for (int i = 0; i < count; i++)
+        {
+            int row = i / columns;
+            int col = i % columns;
+
+            Vector3 offset = new Vector3(col * spacing, -row * spacing, 0);
+
+            Vector3 finalPos = target + offset;
+
+            units[i].MoveTo(finalPos);
         }
     }
 }

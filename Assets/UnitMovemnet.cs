@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class UnitMovement : MonoBehaviour
 {
@@ -7,40 +7,72 @@ public class UnitMovement : MonoBehaviour
     private Vector3 target;
     private bool moving = false;
 
-    private SpriteRenderer sr;
+    private Animator anim;
+
+    [Header("Selection")]
+    public GameObject selectionIndicator;
 
     void Start()
     {
-        sr = GetComponent<SpriteRenderer>();
-        sr.color = Color.green;
+        anim = GetComponent<Animator>();
+        target = transform.position;
+
+        if (selectionIndicator != null)
+            selectionIndicator.SetActive(false);
     }
 
     void Update()
     {
         if (moving)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+            float step = speed * Time.deltaTime;
 
-            if (Vector3.Distance(transform.position, target) < 0.05f)
+            transform.position = Vector3.MoveTowards(transform.position, target, step);
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
+
+            if (Vector3.Distance(transform.position, target) <= step)
             {
+                transform.position = target;
                 moving = false;
+
+                if (anim != null)
+                    anim.SetBool("isMoving", false);
             }
+        }
+
+        if (anim != null)
+        {
+            Vector3 dir = target - transform.position;
+
+            if (dir.magnitude > 0.01f)
+            {
+                dir.Normalize();
+                anim.SetFloat("moveX", dir.x);
+                anim.SetFloat("moveY", dir.y);
+            }
+
+            anim.SetBool("isMoving", moving);
         }
     }
 
     public void MoveTo(Vector3 pos)
     {
-        target = pos;
+        target = new Vector3(pos.x, pos.y, 0f);
         moving = true;
+
+        if (anim != null)
+            anim.SetBool("isMoving", true);
     }
 
     public void Select()
     {
-        sr.color = Color.yellow;
+        if (selectionIndicator != null)
+            selectionIndicator.SetActive(true);
     }
 
     public void Deselect()
     {
-        sr.color = Color.green;
+        if (selectionIndicator != null)
+            selectionIndicator.SetActive(false);
     }
 }

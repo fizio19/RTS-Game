@@ -1,158 +1,133 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems; // WAŻNE
 
 public class SelectionManager : MonoBehaviour
 {
+    public static SelectionManager Instance;
+
     public RectTransform selectionBox;
 
     private Vector2 startPos;
-    private Rect currentSelectionRect;
-
-    private RectTransform selectionBoxParent;
-    private Canvas selectionCanvas;
-
-    public bool isDragging = false;
+    private bool isDragging = false;
 
     public List<UnitMovement> selectedUnits = new List<UnitMovement>();
 
-    void Awake()
+    private void Awake()
     {
-        if (selectionBox != null)
-        {
-            selectionBoxParent = selectionBox.parent as RectTransform;
-            selectionCanvas = selectionBox.GetComponentInParent<Canvas>();
-            selectionBox.gameObject.SetActive(false);
-        }
+        Instance = this;
     }
 
     void Update()
     {
+        // jeśli BuildingPlacer obsłużył klik w tej klatce → NIC NIE RÓB
+        if (BuildingPlacer.inputLockFrame == Time.frameCount)
+            return;
+
+        // jeśli jesteśmy w trybie budowy → brak selekcji
+        if (BuildingPlacer.Instance != null && BuildingPlacer.Instance.selectedBuilding != null)
+            return;
+
+        // klik UI
+        if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            return;
+
         if (Input.GetMouseButtonDown(0))
         {
             startPos = Input.mousePosition;
             isDragging = false;
-            currentSelectionRect = new Rect();
         }
 
         if (Input.GetMouseButton(0))
         {
-            if (Vector2.Distance(startPos, Input.mousePosition) > 10f)
+            if (Vector2.Distance(startPos, Input.mousePosition) > 5f)
             {
                 isDragging = true;
-                currentSelectionRect = GetScreenRect(startPos, Input.mousePosition);
                 selectionBox.gameObject.SetActive(true);
-                UpdateBoxVisual(currentSelectionRect);
+                UpdateBox(Input.mousePosition);
             }
         }
 
         if (Input.GetMouseButtonUp(0))
         {
+            bool add = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+
             if (isDragging)
-            {
-                bool addToSelection = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-                SelectUnitsInBox(addToSelection);
-            }
+                SelectUnits(add);
+            else
+                SelectSingle(add);
 
             selectionBox.gameObject.SetActive(false);
         }
     }
 
-    void UpdateBoxVisual(Rect screenRect)
+    void UpdateBox(Vector2 currentMousePos)
     {
-        if (selectionBox == null || selectionBoxParent == null)
-        {
-            return;
-        }
+        Vector2 start = startPos;
+        Vector2 end = currentMousePos;
 
-        Camera uiCamera = null;
-        if (selectionCanvas != null && selectionCanvas.renderMode != RenderMode.ScreenSpaceOverlay)
-        {
-            uiCamera = selectionCanvas.worldCamera;
-        }
+        Vector2 center = (start + end) / 2f;
+        Vector2 size = new Vector2(Mathf.Abs(start.x - end.x), Mathf.Abs(start.y - end.y));
 
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(selectionBoxParent, screenRect.min, uiCamera, out var localMin);
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(selectionBoxParent, screenRect.max, uiCamera, out var localMax);
-
-        Vector2 size = localMax - localMin;
-        Vector2 center = (localMin + localMax) * 0.5f;
-
-        selectionBox.anchoredPosition = center;
-        selectionBox.sizeDelta = new Vector2(Mathf.Abs(size.x), Mathf.Abs(size.y));
+        selectionBox.position = center;
+        selectionBox.sizeDelta = size;
     }
 
-    Rect GetScreenRect(Vector2 pointA, Vector2 pointB)
+    void SelectUnits(bool add)
     {
-        float xMin = Mathf.Min(pointA.x, pointB.x);
-        float yMin = Mathf.Min(pointA.y, pointB.y);
-        float xMax = Mathf.Max(pointA.x, pointB.x);
-        float yMax = Mathf.Max(pointA.y, pointB.y);
-
-        return Rect.MinMaxRect(xMin, yMin, xMax, yMax);
-    }
-
-    public void SelectUnitsInBox(bool addToSelection)
-    {
-        if (!addToSelection)
-        {
+        if (!add)
             ClearSelection();
-        }
+
+        Vector2 start = startPos;
+        Vector2 end = Input.mousePosition;
+
+        float minX = Mathf.Min(start.x, end.x);
+        float maxX = Mathf.Max(start.x, end.x);
+        float minY = Mathf.Min(start.y, end.y);
+        float maxY = Mathf.Max(start.y, end.y);
 
         foreach (var unit in FindObjectsOfType<UnitMovement>())
         {
-            Vector3 screenPoint = Camera.main.WorldToScreenPoint(unit.transform.position);
-            if (screenPoint.z < 0f)
-            {
-                continue;
-            }
+            Vector3 pos = Camera.main.WorldToScreenPoint(unit.transform.position);
 
-            if (currentSelectionRect.Contains(screenPoint) && !selectedUnits.Contains(unit))
+            if (pos.x >= minX && pos.x <= maxX &&
+                pos.y >= minY && pos.y <= maxY)
             {
-                unit.Select();
-                selectedUnits.Add(unit);
+                if (!selectedUnits.Contains(unit))
+                {
+                    unit.Select();
+                    selectedUnits.Add(unit);
+                }
             }
         }
     }
 
-    public void SelectSingleUnit(UnitMovement unit, bool addToSelection)
+    void SelectSingle(bool add)
     {
-        if (unit == null)
-        {
-            if (!addToSelection)
-            {
-                ClearSelection();
-            }
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            return;
-        }
+        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
-        if (addToSelection)
+        if (!add)
+            ClearSelection();
+
+        if (hit.collider != null)
         {
-            if (selectedUnits.Contains(unit))
-            {
-                unit.Deselect();
-                selectedUnits.Remove(unit);
-            }
-            else
+            UnitMovement unit = hit.collider.GetComponent<UnitMovement>();
+
+            if (unit != null)
             {
                 unit.Select();
                 selectedUnits.Add(unit);
             }
-
-            return;
         }
-
-        ClearSelection();
-        unit.Select();
-        selectedUnits.Add(unit);
     }
 
-    public void ClearSelection()
+    void ClearSelection()
     {
         foreach (var unit in selectedUnits)
-        {
             unit.Deselect();
-        }
 
         selectedUnits.Clear();
     }
