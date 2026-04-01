@@ -7,6 +7,58 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\UnitMovemnet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\SelectionManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\SelectionManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Units\\Worker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Units\\Worker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Buildings\\BuildingPlacer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Buildings\\BuildingPlacer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\UnitCommandHandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\UnitCommandHandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\ResourceManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\ResourceManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\ResourceNode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\ResourceNode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\WorkerUIController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\WorkerUIController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\BuildButton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\BuildButton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Buildings\\Building.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Buildings\\Building.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Data\\BuildingData.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Data\\BuildingData.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Buildings\\DropOffPoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Buildings\\DropOffPoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\ResourceType.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\ResourceType.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Data\\UnitData.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Data\\UnitData.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\GameManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\GameManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -17,10 +69,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\terrain\\dirt\\TilemapGenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\terrain\\dirt\\TilemapGenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\SelectionManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\SelectionManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,56 +78,30 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "RTSCamera.cs",
-              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\RTSCamera.cs",
-              "RelativeDocumentMoniker": "Assets\\RTSCamera.cs",
-              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\RTSCamera.cs",
-              "RelativeToolTip": "Assets\\RTSCamera.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADQAAAABAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "UnitCommandHandler.cs",
+              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\UnitCommandHandler.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\UnitCommandHandler.cs",
+              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\UnitCommandHandler.cs",
+              "RelativeToolTip": "Assets\\Scripts\\UnitCommandHandler.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAqwCoAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-29T22:41:33.584Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "TilemapGenerator.cs",
-              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\terrain\\dirt\\TilemapGenerator.cs",
-              "RelativeDocumentMoniker": "Assets\\terrain\\dirt\\TilemapGenerator.cs",
-              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\terrain\\dirt\\TilemapGenerator.cs",
-              "RelativeToolTip": "Assets\\terrain\\dirt\\TilemapGenerator.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAA6AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-29T22:34:39.447Z",
+              "WhenOpened": "2026-03-30T14:53:52.176Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "GameManager.cs",
-              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\GameManager.cs",
-              "RelativeDocumentMoniker": "Assets\\GameManager.cs",
-              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\GameManager.cs",
-              "RelativeToolTip": "Assets\\GameManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAfAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-29T21:39:01.484Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
               "Title": "SelectionManager.cs",
               "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\SelectionManager.cs",
               "RelativeDocumentMoniker": "Assets\\SelectionManager.cs",
               "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\SelectionManager.cs",
               "RelativeToolTip": "Assets\\SelectionManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADYAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAACoAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-29T21:31:52.978Z",
               "EditorCaption": ""
@@ -92,10 +114,181 @@
               "RelativeDocumentMoniker": "Assets\\UnitMovemnet.cs",
               "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\UnitMovemnet.cs",
               "RelativeToolTip": "Assets\\UnitMovemnet.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAwwCEAAAAOAAAAAAAAAA==",
+              "ViewState": "AgIAABoAAAAAAAAAAAAqwCcAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-29T14:08:56.49Z",
+              "WhenOpened": "2026-03-30T14:51:41.84Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Worker.cs",
+              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Units\\Worker.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Units\\Worker.cs",
+              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Units\\Worker.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Units\\Worker.cs",
+              "ViewState": "AgIAANAAAAAAAAAAAAAuwPEAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-30T14:32:02.742Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BuildingPlacer.cs",
+              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Buildings\\BuildingPlacer.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Buildings\\BuildingPlacer.cs",
+              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Buildings\\BuildingPlacer.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Buildings\\BuildingPlacer.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAAAB8AAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-30T16:12:12.846Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ResourceManager.cs",
+              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\ResourceManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\ResourceManager.cs",
+              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\ResourceManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\ResourceManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-30T14:15:16.42Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ResourceNode.cs",
+              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\ResourceNode.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\ResourceNode.cs",
+              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\ResourceNode.cs",
+              "RelativeToolTip": "Assets\\Scripts\\ResourceNode.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-30T14:31:19.984Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "BuildButton.cs",
+              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\BuildButton.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\BuildButton.cs",
+              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\BuildButton.cs",
+              "RelativeToolTip": "Assets\\Scripts\\BuildButton.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-30T17:34:29.583Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "WorkerUIController.cs",
+              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\WorkerUIController.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\WorkerUIController.cs",
+              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\WorkerUIController.cs",
+              "RelativeToolTip": "Assets\\Scripts\\WorkerUIController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-30T18:02:36.696Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Building.cs",
+              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Buildings\\Building.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Buildings\\Building.cs",
+              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Buildings\\Building.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Buildings\\Building.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-30T16:11:27.17Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "BuildingData.cs",
+              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Data\\BuildingData.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Data\\BuildingData.cs",
+              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Data\\BuildingData.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Data\\BuildingData.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-30T13:42:39.308Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "DropOffPoint.cs",
+              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Buildings\\DropOffPoint.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Buildings\\DropOffPoint.cs",
+              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Buildings\\DropOffPoint.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Buildings\\DropOffPoint.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-30T14:31:43.693Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ResourceType.cs",
+              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\ResourceType.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\ResourceType.cs",
+              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\ResourceType.cs",
+              "RelativeToolTip": "Assets\\Scripts\\ResourceType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-30T14:31:03.242Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "UnitData.cs",
+              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Data\\UnitData.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Data\\UnitData.cs",
+              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\Data\\UnitData.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Data\\UnitData.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-30T13:41:11.651Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "TilemapGenerator.cs",
+              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\terrain\\dirt\\TilemapGenerator.cs",
+              "RelativeDocumentMoniker": "Assets\\terrain\\dirt\\TilemapGenerator.cs",
+              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\terrain\\dirt\\TilemapGenerator.cs",
+              "RelativeToolTip": "Assets\\terrain\\dirt\\TilemapGenerator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-29T22:34:39.447Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "GameManager.cs",
+              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\GameManager.cs",
+              "RelativeDocumentMoniker": "Assets\\GameManager.cs",
+              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\GameManager.cs",
+              "RelativeToolTip": "Assets\\GameManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-29T21:39:01.484Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "RTSCamera.cs",
+              "DocumentMoniker": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\RTSCamera.cs",
+              "RelativeDocumentMoniker": "Assets\\RTSCamera.cs",
+              "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\RTSCamera.cs",
+              "RelativeToolTip": "Assets\\RTSCamera.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-29T22:41:33.584Z"
             }
           ]
         }

@@ -4,11 +4,9 @@ public class UnitCommandHandler : MonoBehaviour
 {
     void Update()
     {
-        // jeśli BuildingPlacer obsłużył klik w tej klatce -> NIC NIE RÓB
         if (BuildingPlacer.inputLockFrame == Time.frameCount)
             return;
 
-        // jeśli budujemy -> brak komend
         if (BuildingPlacer.Instance != null && BuildingPlacer.Instance.selectedBuilding != null)
             return;
 
@@ -23,22 +21,47 @@ public class UnitCommandHandler : MonoBehaviour
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
-        foreach (UnitMovement unit in SelectionManager.Instance.selectedUnits)
+        foreach (var unit in SelectionManager.Instance.selectedUnits)
         {
             Worker worker = unit.GetComponent<Worker>();
 
+            // ======================
+            // RESOURCE
+            // ======================
             if (hit.collider != null)
             {
-                ResourceNode resource = hit.collider.GetComponent<ResourceNode>();
+                ResourceNode resource = hit.collider.GetComponentInParent<ResourceNode>();
 
                 if (resource != null && worker != null)
                 {
                     worker.SetTarget(resource);
+
+                    Vector3 pos = hit.collider.ClosestPoint(unit.transform.position);
+                    unit.MoveTo(pos);
+
+                    continue;
+                }
+
+                // ======================
+                // BUDYNEK (tylko Building!)
+                // ======================
+                Building building = hit.collider.GetComponentInParent<Building>();
+
+                if (building != null)
+                {
+                    Vector3 pos = hit.collider.ClosestPoint(unit.transform.position);
+                    unit.MoveTo(pos);
+
+                    if (worker != null)
+                        worker.StopWorkExternal();
+
                     continue;
                 }
             }
 
-            // ruch
+            // ======================
+            // PUSTA MAPA (tilemap też tu trafia)
+            // ======================
             unit.MoveTo(mousePos);
 
             if (worker != null)

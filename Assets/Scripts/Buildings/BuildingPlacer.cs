@@ -3,63 +3,44 @@
 public class BuildingPlacer : MonoBehaviour
 {
     public static BuildingPlacer Instance;
-    public static int inputLockFrame = -1;
+
+    public static int inputLockFrame;
     public static bool consumeNextLeftMouseUp = false;
 
     public BuildingData selectedBuilding;
-    public bool isPlacingBuilding = false;
-    public bool IsInBuildMode()
-    {
-        return selectedBuilding != null;
-    }
 
     private GameObject previewObject;
     private SpriteRenderer previewRenderer;
 
     private bool canBuild = true;
+    private bool isPlacingBuilding = false;
 
     private void Awake()
     {
         Instance = this;
     }
 
-    void Start()
-    {
-        selectedBuilding = null;
-    }
-
     void Update()
     {
         if (selectedBuilding == null)
         {
+            isPlacingBuilding = false;
             DestroyPreview();
             return;
         }
 
+        isPlacingBuilding = true;
+
         UpdatePreview();
 
-        // LPM = buduj (zablokuj resztę w tej klatce)
-        if (Input.GetMouseButtonDown(0))
+        // LPM = budowanie
+        if (Input.GetMouseButtonDown(0) && canBuild)
         {
-            inputLockFrame = Time.frameCount;
-            consumeNextLeftMouseUp = true;
-
-            if (canBuild)
-                TryPlaceBuilding();
-
-            return;
+            TryPlaceBuilding();
         }
 
-        // PPM = anuluj (zablokuj resztę w tej klatce)
+        // PPM = anuluj
         if (Input.GetMouseButtonDown(1))
-        {
-            inputLockFrame = Time.frameCount;
-
-            CancelBuilding();
-            return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
         {
             CancelBuilding();
         }
@@ -84,14 +65,18 @@ public class BuildingPlacer : MonoBehaviour
 
     void CheckBuildValidity(Vector3 pos)
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(pos, 0.5f);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(pos, 0.6f);
 
         canBuild = true;
 
         foreach (var hit in hits)
         {
-            if (hit.GetComponent<ResourceNode>() != null ||
-                hit.GetComponent<Building>() != null)
+            if (previewObject != null && hit.gameObject == previewObject)
+                continue;
+
+            if (hit.GetComponentInParent<ResourceNode>() != null ||
+                hit.GetComponentInParent<Building>() != null ||
+                hit.GetComponentInParent<UnitMovement>() != null)
             {
                 canBuild = false;
                 return;
@@ -103,8 +88,8 @@ public class BuildingPlacer : MonoBehaviour
     {
         if (SelectionManager.Instance.selectedUnits.Count == 0)
         {
-            Debug.Log("Brak jednostki!");
-            return; // NIE anulujemy trybu
+            CancelBuilding();
+            return;
         }
 
         bool success = ResourceManager.Instance.SpendResources(
@@ -116,8 +101,8 @@ public class BuildingPlacer : MonoBehaviour
 
         if (!success)
         {
-            Debug.Log("Za mało surowców!");
-            return; // NIE CancelBuilding()
+            CancelBuilding();
+            return;
         }
 
         PlaceBuilding();
@@ -137,12 +122,17 @@ public class BuildingPlacer : MonoBehaviour
             }
         }
 
-        bool keepPlacing = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-        if (!keepPlacing)
-        {
-            CancelBuilding();
-            isPlacingBuilding = false;
-        }
+        CancelBuilding();
+
+        consumeNextLeftMouseUp = true;
+        inputLockFrame = Time.frameCount;
+
+        Invoke(nameof(ResetPlacingFlag), 0.1f);
+    }
+
+    void ResetPlacingFlag()
+    {
+        isPlacingBuilding = false;
     }
 
     void DestroyPreview()
@@ -162,18 +152,22 @@ public class BuildingPlacer : MonoBehaviour
         if (previewRenderer == null)
             return;
 
-        previewRenderer.color = canBuild
-            ? new Color(0, 1, 0, 0.5f)
-            : new Color(1, 0, 0, 0.5f);
+        Color c = previewRenderer.color;
+
+        if (canBuild)
+        {
+            c = new Color(0, 1, 0, 0.5f);
+        }
+        else
+        {
+            c = new Color(1, 0, 0, 0.5f);
+        }
+
+        previewRenderer.color = c;
     }
 
-    System.Collections.IEnumerator CancelNextFrame()
+    void Start()
     {
-        isPlacingBuilding = true;
-
-        yield return null; // czekaj 1 klatkę
-
-        CancelBuilding();
-        isPlacingBuilding = false;
+        selectedBuilding = null;
     }
 }

@@ -30,7 +30,7 @@ public class UnitMovement : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, target, step);
             transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
 
-            if (Vector3.Distance(transform.position, target) <= step)
+            if (Vector3.Distance(transform.position, target) < 0.05f)
             {
                 transform.position = target;
                 moving = false;

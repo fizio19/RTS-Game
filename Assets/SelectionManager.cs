@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems; // WAŻNE
+using UnityEngine.EventSystems;
 
 public class SelectionManager : MonoBehaviour
 {
@@ -21,16 +20,7 @@ public class SelectionManager : MonoBehaviour
 
     void Update()
     {
-        // jeśli BuildingPlacer obsłużył klik w tej klatce → NIC NIE RÓB
-        if (BuildingPlacer.inputLockFrame == Time.frameCount)
-            return;
-
-        // jeśli jesteśmy w trybie budowy → brak selekcji
-        if (BuildingPlacer.Instance != null && BuildingPlacer.Instance.selectedBuilding != null)
-            return;
-
-        // klik UI
-        if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+        if (EventSystem.current.IsPointerOverGameObject())
             return;
 
         if (Input.GetMouseButtonDown(0))
@@ -51,13 +41,6 @@ public class SelectionManager : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            if (BuildingPlacer.consumeNextLeftMouseUp)
-            {
-                BuildingPlacer.consumeNextLeftMouseUp = false;
-                selectionBox.gameObject.SetActive(false);
-                return;
-            }
-
             bool add = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
 
             if (isDragging)
@@ -71,11 +54,11 @@ public class SelectionManager : MonoBehaviour
 
     void UpdateBox(Vector2 currentMousePos)
     {
-        Vector2 start = startPos;
-        Vector2 end = currentMousePos;
-
-        Vector2 center = (start + end) / 2f;
-        Vector2 size = new Vector2(Mathf.Abs(start.x - end.x), Mathf.Abs(start.y - end.y));
+        Vector2 center = (startPos + currentMousePos) / 2f;
+        Vector2 size = new Vector2(
+            Mathf.Abs(startPos.x - currentMousePos.x),
+            Mathf.Abs(startPos.y - currentMousePos.y)
+        );
 
         selectionBox.position = center;
         selectionBox.sizeDelta = size;
@@ -113,7 +96,6 @@ public class SelectionManager : MonoBehaviour
     void SelectSingle(bool add)
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
         RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
         if (!add)

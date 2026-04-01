@@ -17,12 +17,9 @@ public class Worker : MonoBehaviour
     private bool isReturning;
     private bool isBuilding;
 
-    private UnitMovement movement;
-
-    private Vector3 currentTarget;
-    private bool hasMoveTarget;
-
     private float gatherTimer;
+
+    private UnitMovement movement;
 
     private void Awake()
     {
@@ -38,112 +35,49 @@ public class Worker : MonoBehaviour
         }
 
         if (isGathering && targetResource != null)
-        {
             Gather();
-        }
-        else if (isReturning && targetDropOff != null)
-        {
+
+        if (isReturning && targetDropOff != null)
             ReturnResources();
-        }
     }
 
     public void SetTarget(ResourceNode resource)
     {
-        StopWork();
+        ResetAll();
 
         targetResource = resource;
         isGathering = true;
         gatherTimer = 0f;
-    }
 
-    public void StartBuilding(BuildingData data, Vector3 position)
-    {
-        Debug.Log("START BUILDING");
-
-        StopWork();
-
-        buildingToBuild = data;
-        buildPosition = position;
-        isBuilding = true;
-        hasMoveTarget = false;
-    }
-
-    private void Build()
-    {
-        float distance = Vector2.Distance(transform.position, buildPosition);
-
-        if (distance > 2.5f)
-        {
-            MoveOnce(buildPosition);
-            return;
-        }
-
-        Debug.Log("BUDUJE OBIEKT");
-
-        hasMoveTarget = false;
-
-        if (buildingToBuild == null || buildingToBuild.prefab == null)
-        {
-            Debug.LogError("BRAK PREFABU!");
-            StopWork();
-            return;
-        }
-
-        GameObject obj = Instantiate(buildingToBuild.prefab, buildPosition, Quaternion.identity);
-
-        Building building = obj.GetComponent<Building>();
-        if (building != null)
-            building.Init(buildingToBuild);
-
-        StopWork();
+        movement.MoveTo(resource.transform.position);
     }
 
     private void Gather()
     {
-        if (targetResource == null)
-        {
-            StopWork();
+        float dist = Vector2.Distance(transform.position, targetResource.transform.position);
+
+        if (dist > 1.2f)
             return;
-        }
-
-        float distance = Vector2.Distance(transform.position, targetResource.transform.position);
-
-        if (distance > 1f)
-        {
-            MoveOnce(targetResource.transform.position);
-            return;
-        }
-
-        hasMoveTarget = false;
 
         gatherTimer += Time.deltaTime;
+
         if (gatherTimer < 1f)
             return;
 
-        gatherTimer -= 1f;
+        gatherTimer = 0f;
 
-        int gatherPerSecond = Mathf.Max(1, Mathf.RoundToInt(unitData.gatherRate));
-        int carryCapacity = Mathf.Max(1, Mathf.RoundToInt(unitData.carryCapacity));
-        int missingCapacity = Mathf.Max(0, carryCapacity - carriedAmount);
+        int gathered = targetResource.Harvest(1);
 
-        if (missingCapacity <= 0)
-        {
-            isGathering = false;
-            FindDropOff();
-            return;
-        }
-
-        int gathered = targetResource.Harvest(Mathf.Min(gatherPerSecond, missingCapacity));
         if (gathered <= 0)
         {
-            StopWork();
+            ResetAll();
             return;
         }
 
         carriedAmount += gathered;
         carriedType = targetResource.resourceType;
 
-        if (carriedAmount >= carryCapacity)
+        if (carriedAmount >= 10)
         {
             isGathering = false;
             FindDropOff();
@@ -152,78 +86,70 @@ public class Worker : MonoBehaviour
 
     private void FindDropOff()
     {
-        DropOffPoint[] dropOffs = FindObjectsOfType<DropOffPoint>();
-
-        targetDropOff = null;
-        float minDistance = float.MaxValue;
-
-        foreach (DropOffPoint dropOff in dropOffs)
-        {
-            float distance = Vector2.Distance(transform.position, dropOff.transform.position);
-            if (distance < minDistance)
-            {
-                minDistance = distance;
-                targetDropOff = dropOff;
-            }
-        }
+        targetDropOff = FindObjectOfType<DropOffPoint>();
 
         if (targetDropOff == null)
         {
-            StopWork();
+            ResetAll();
             return;
         }
 
         isReturning = true;
-        hasMoveTarget = false;
+        movement.MoveTo(targetDropOff.transform.position);
     }
 
     private void ReturnResources()
     {
-        if (targetDropOff == null)
-        {
-            StopWork();
+        float dist = Vector2.Distance(transform.position, targetDropOff.transform.position);
+
+        if (dist > 1f)
             return;
-        }
-
-        float distance = Vector2.Distance(transform.position, targetDropOff.transform.position);
-
-        if (distance > 1f)
-        {
-            MoveOnce(targetDropOff.transform.position);
-            return;
-        }
-
-        hasMoveTarget = false;
 
         if (carriedType == ResourceType.Wood)
             ResourceManager.Instance.AddWood(carriedAmount);
 
         carriedAmount = 0;
 
-        if (targetResource == null || targetResource.amount <= 0)
+        if (targetResource == null)
         {
-            StopWork();
+            ResetAll();
             return;
         }
 
         isReturning = false;
         isGathering = true;
-        gatherTimer = 0f;
+
+        movement.MoveTo(targetResource.transform.position);
     }
 
-    private void MoveOnce(Vector3 target)
+    public void StartBuilding(BuildingData data, Vector3 pos)
     {
-        if (hasMoveTarget && Vector3.Distance(currentTarget, target) < 0.1f)
+        ResetAll();
+
+        buildingToBuild = data;
+        buildPosition = pos;
+        isBuilding = true;
+
+        movement.MoveTo(pos);
+    }
+
+    private void Build()
+    {
+        float dist = Vector2.Distance(transform.position, buildPosition);
+
+        if (dist > 1f)
             return;
 
-        currentTarget = target;
-        hasMoveTarget = true;
+        GameObject obj = Instantiate(buildingToBuild.prefab, buildPosition, Quaternion.identity);
 
-        if (movement != null)
-            movement.MoveTo(target);
+        Building b = obj.GetComponent<Building>();
+        if (b != null)
+            b.Init(buildingToBuild);
+
+        ResetAll();
     }
 
-    private void StopWork()
+    private void ResetAll()
     {
         isGathering = false;
         isReturning = false;
@@ -233,21 +159,12 @@ public class Worker : MonoBehaviour
         targetDropOff = null;
         buildingToBuild = null;
 
-        hasMoveTarget = false;
+        carriedAmount = 0;
         gatherTimer = 0f;
     }
 
     public void StopWorkExternal()
     {
-        if (isBuilding)
-            return;
-
-        isGathering = false;
-        isReturning = false;
-
-        targetResource = null;
-        targetDropOff = null;
-        buildingToBuild = null;
-        gatherTimer = 0f;
+        ResetAll();
     }
 }
