@@ -23,6 +23,10 @@ public class UnitMovement : MonoBehaviour
         anim = GetComponent<Animator>();
         target = transform.position;
 
+        Worker worker = GetComponent<Worker>();
+        if (worker != null && worker.unitData != null)
+            speed = worker.unitData.moveSpeed;
+
         if (selectionIndicator != null)
             selectionIndicator.SetActive(false);
     }
@@ -34,8 +38,6 @@ public class UnitMovement : MonoBehaviour
             float step = speed * Time.deltaTime;
 
             Vector3 direction = (target - transform.position).normalized;
-
-            // próba pełnego ruchu
             Vector3 newPos = transform.position + direction * step;
 
             Collider2D hit = Physics2D.OverlapCircle(newPos, 0.15f, LayerMask.GetMask("Building"));
@@ -46,9 +48,6 @@ public class UnitMovement : MonoBehaviour
             }
             else
             {
-                // SLIDING
-
-                // próbuj ruch tylko w X
                 Vector3 moveX = new Vector3(direction.x, 0, 0) * step;
                 Vector3 posX = transform.position + moveX;
 
@@ -58,7 +57,6 @@ public class UnitMovement : MonoBehaviour
                 }
                 else
                 {
-                    // próbuj ruch tylko w Y
                     Vector3 moveY = new Vector3(0, direction.y, 0) * step;
                     Vector3 posY = transform.position + moveY;
 
@@ -66,13 +64,11 @@ public class UnitMovement : MonoBehaviour
                     {
                         transform.position = posY;
                     }
-                    // jeśli nic nie działa → stoi (to OK)
                 }
             }
 
             transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
 
-            // zmiana punktu dopiero po dojściu
             if (Vector3.Distance(transform.position, target) < 0.2f)
             {
                 if (usePathfinding && path != null)
@@ -95,7 +91,6 @@ public class UnitMovement : MonoBehaviour
             }
         }
 
-        // animacja
         if (anim != null)
         {
             Vector3 moveDir = moving ? (target - transform.position) : Vector3.zero;
