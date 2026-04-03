@@ -20,6 +20,11 @@ public class BuildingPlacer : MonoBehaviour
         Instance = this;
     }
 
+    void Start()
+    {
+        selectedBuilding = null;
+    }
+
     void Update()
     {
         if (selectedBuilding == null)
@@ -48,8 +53,12 @@ public class BuildingPlacer : MonoBehaviour
 
     void UpdatePreview()
     {
-        Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        pos.z = 0;
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0f;
+
+        // SNAP DO GRIDA
+        Vector2Int gridPos = GridManager.Instance.WorldToGrid(mousePos);
+        Vector3 snappedPos = GridManager.Instance.GridToWorld(gridPos);
 
         if (previewObject == null)
         {
@@ -57,15 +66,15 @@ public class BuildingPlacer : MonoBehaviour
             previewRenderer = previewObject.GetComponent<SpriteRenderer>();
         }
 
-        previewObject.transform.position = pos;
+        previewObject.transform.position = snappedPos;
 
-        CheckBuildValidity(pos);
+        CheckBuildValidity(snappedPos);
         UpdateColor();
     }
 
     void CheckBuildValidity(Vector3 pos)
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(pos, 0.6f);
+        Collider2D[] hits = Physics2D.OverlapBoxAll(pos, new Vector2(1.0f, 1.0f), 0f);
 
         canBuild = true;
 
@@ -152,22 +161,13 @@ public class BuildingPlacer : MonoBehaviour
         if (previewRenderer == null)
             return;
 
-        Color c = previewRenderer.color;
-
         if (canBuild)
         {
-            c = new Color(0, 1, 0, 0.5f);
+            previewRenderer.color = new Color(0, 1, 0, 0.5f);
         }
         else
         {
-            c = new Color(1, 0, 0, 0.5f);
+            previewRenderer.color = new Color(1, 0, 0, 0.5f);
         }
-
-        previewRenderer.color = c;
-    }
-
-    void Start()
-    {
-        selectedBuilding = null;
     }
 }

@@ -9,6 +9,7 @@ public class Worker : MonoBehaviour
 
     private BuildingData buildingToBuild;
     private Vector3 buildPosition;
+    private Vector3 buildTargetPosition;
 
     private int carriedAmount;
     private ResourceType carriedType;
@@ -49,14 +50,15 @@ public class Worker : MonoBehaviour
         isGathering = true;
         gatherTimer = 0f;
 
-        movement.MoveTo(resource.transform.position);
+        Vector3 targetPos = GetClosestPoint(resource.transform.position);
+        movement.MoveDirect(targetPos);
     }
 
     private void Gather()
     {
         float dist = Vector2.Distance(transform.position, targetResource.transform.position);
 
-        if (dist > 1.2f)
+        if (dist > 2.0f)
             return;
 
         gatherTimer += Time.deltaTime;
@@ -77,6 +79,8 @@ public class Worker : MonoBehaviour
         carriedAmount += gathered;
         carriedType = targetResource.resourceType;
 
+        targetResource.PlayGatherEffect();
+
         if (carriedAmount >= 10)
         {
             isGathering = false;
@@ -95,14 +99,16 @@ public class Worker : MonoBehaviour
         }
 
         isReturning = true;
-        movement.MoveTo(targetDropOff.transform.position);
+
+        Vector3 targetPos = GetClosestPoint(targetDropOff.transform.position);
+        movement.MoveDirect(targetPos);
     }
 
     private void ReturnResources()
     {
         float dist = Vector2.Distance(transform.position, targetDropOff.transform.position);
 
-        if (dist > 1f)
+        if (dist > 2.0f)
             return;
 
         if (carriedType == ResourceType.Wood)
@@ -119,7 +125,8 @@ public class Worker : MonoBehaviour
         isReturning = false;
         isGathering = true;
 
-        movement.MoveTo(targetResource.transform.position);
+        Vector3 targetPos = GetClosestPoint(targetResource.transform.position);
+        movement.MoveDirect(targetPos);
     }
 
     public void StartBuilding(BuildingData data, Vector3 pos)
@@ -130,14 +137,18 @@ public class Worker : MonoBehaviour
         buildPosition = pos;
         isBuilding = true;
 
-        movement.MoveTo(pos);
+        // zapamiêtujemy punkt obok
+        buildTargetPosition = GetBuildPosition(pos);
+
+        movement.MoveDirect(buildTargetPosition);
     }
 
     private void Build()
     {
-        float dist = Vector2.Distance(transform.position, buildPosition);
+        // sprawdzamy dystans do pozycji OBOK
+        float dist = Vector2.Distance(transform.position, buildTargetPosition);
 
-        if (dist > 1f)
+        if (dist > 0.5f)
             return;
 
         GameObject obj = Instantiate(buildingToBuild.prefab, buildPosition, Quaternion.identity);
@@ -166,5 +177,51 @@ public class Worker : MonoBehaviour
     public void StopWorkExternal()
     {
         ResetAll();
+    }
+
+    private Vector3 GetClosestPoint(Vector3 targetPos)
+    {
+        Vector3 dir = (targetPos - transform.position).normalized;
+        return targetPos - dir * 0.6f;
+    }
+
+    Vector3 GetBuildPosition(Vector3 buildPos)
+    {
+        float offset = 2.0f;
+
+        Vector3 bestPos = buildPos;
+        float bestDist = float.MaxValue;
+
+        Vector3[] directions = new Vector3[]
+        {
+        Vector3.up,
+        Vector3.down,
+        Vector3.left,
+        Vector3.right,
+        new Vector3(1,1,0).normalized,
+        new Vector3(-1,1,0).normalized,
+        new Vector3(1,-1,0).normalized,
+        new Vector3(-1,-1,0).normalized
+        };
+
+        foreach (var dir in directions)
+        {
+            Vector3 checkPos = buildPos + dir * offset;
+
+            Collider2D hit = Physics2D.OverlapCircle(checkPos, 0.35f, LayerMask.GetMask("Building"));
+
+            if (hit != null)
+                continue;
+
+            float dist = Vector3.Distance(transform.position, checkPos);
+
+            if (dist < bestDist)
+            {
+                bestDist = dist;
+                bestPos = checkPos;
+            }
+        }
+
+        return bestPos;
     }
 }
