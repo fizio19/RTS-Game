@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: StorageData
   m_EditorClassIdentifier: 
   buildingName: Storage
-  maxHealth: 500
-  prefab: {fileID: 4284683541881056737, guid: ef83734c4f39ff749a2e799426306876, type: 3}
-  woodCost: 40
+  maxHealth: 80
+  buildTime: 10
+  woodCost: 60
   foodCost: 0
-  stoneCost: 0
+  stoneCost: 40
   goldCost: 0
-  buildTime: 1
+  prefab: {fileID: 4284683541881056737, guid: ef83734c4f39ff749a2e799426306876, type: 3}

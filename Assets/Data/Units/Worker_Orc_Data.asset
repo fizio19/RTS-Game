@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f18a23faeef2344489f6cd3b5071b18, type: 3}
+  m_Name: Worker_Orc_Data
+  m_EditorClassIdentifier: 
+  unitName: Orc
+  moveSpeed: 5
+  maxHealth: 100
+  carryCapacity: 10
+  gatherSpeed: 1
+  woodCost: 0
+  foodCost: 10
+  stoneCost: 0
+  goldCost: 1
+  prefab: {fileID: 0}
