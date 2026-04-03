@@ -12,6 +12,7 @@ public class SelectionManager : MonoBehaviour
     private bool isDragging = false;
 
     public List<UnitMovement> selectedUnits = new List<UnitMovement>();
+    public Building selectedBuilding;
 
     private void Awake()
     {
@@ -104,11 +105,24 @@ public class SelectionManager : MonoBehaviour
         if (hit.collider != null)
         {
             UnitMovement unit = hit.collider.GetComponent<UnitMovement>();
+            if (unit == null)
+                unit = hit.collider.GetComponentInParent<UnitMovement>();
 
             if (unit != null)
             {
                 unit.Select();
                 selectedUnits.Add(unit);
+                return;
+            }
+
+            Building building = hit.collider.GetComponent<Building>();
+            if (building == null)
+                building = hit.collider.GetComponentInParent<Building>();
+
+            if (building != null)
+            {
+                selectedBuilding = building;
+                selectedBuilding.Select();
             }
         }
     }
@@ -119,5 +133,11 @@ public class SelectionManager : MonoBehaviour
             unit.Deselect();
 
         selectedUnits.Clear();
+
+        if (selectedBuilding != null)
+        {
+            selectedBuilding.Deselect();
+            selectedBuilding = null;
+        }
     }
 }

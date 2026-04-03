@@ -3,6 +3,7 @@ using UnityEngine;
 public class Worker : MonoBehaviour
 {
     public UnitData unitData;
+    public int attackDamage = 1;
 
     private ResourceNode targetResource;
     private DropOffPoint targetDropOff;
@@ -19,12 +20,25 @@ public class Worker : MonoBehaviour
     private bool isBuilding;
 
     private float gatherTimer;
+    private float currentHealth;
 
     private UnitMovement movement;
+
+    public int CarriedAmount => carriedAmount;
+    public int CarryCapacity => unitData != null ? unitData.carryCapacity : 10;
+    public int AttackDamage => attackDamage;
+    public float CurrentHealth => currentHealth;
+    public float MaxHealth => unitData != null ? unitData.maxHealth : 100f;
+    public string UnitName => unitData != null ? unitData.unitName : gameObject.name;
 
     private void Awake()
     {
         movement = GetComponent<UnitMovement>();
+
+        if (unitData != null)
+            currentHealth = unitData.maxHealth;
+        else
+            currentHealth = 100f;
     }
 
     private void Update()
@@ -44,7 +58,7 @@ public class Worker : MonoBehaviour
 
     public void SetTarget(ResourceNode resource)
     {
-        ResetAll();
+        ResetWorkState();
 
         targetResource = resource;
         isGathering = true;
@@ -63,7 +77,8 @@ public class Worker : MonoBehaviour
 
         gatherTimer += Time.deltaTime;
 
-        if (gatherTimer < 1f)
+        float gatherInterval = unitData != null ? unitData.gatherSpeed : 1f;
+        if (gatherTimer < gatherInterval)
             return;
 
         gatherTimer = 0f;
@@ -72,7 +87,7 @@ public class Worker : MonoBehaviour
 
         if (gathered <= 0)
         {
-            ResetAll();
+            ResetWorkState();
             return;
         }
 
@@ -81,7 +96,7 @@ public class Worker : MonoBehaviour
 
         targetResource.PlayGatherEffect();
 
-        if (carriedAmount >= 10)
+        if (carriedAmount >= CarryCapacity)
         {
             isGathering = false;
             FindDropOff();
@@ -94,7 +109,7 @@ public class Worker : MonoBehaviour
 
         if (targetDropOff == null)
         {
-            ResetAll();
+            ResetWorkState();
             return;
         }
 
@@ -118,7 +133,7 @@ public class Worker : MonoBehaviour
 
         if (targetResource == null)
         {
-            ResetAll();
+            ResetWorkState();
             return;
         }
 
@@ -131,13 +146,12 @@ public class Worker : MonoBehaviour
 
     public void StartBuilding(BuildingData data, Vector3 pos)
     {
-        ResetAll();
+        ResetWorkState();
 
         buildingToBuild = data;
         buildPosition = pos;
         isBuilding = true;
 
-        // zapamiêtujemy punkt obok
         buildTargetPosition = GetBuildPosition(pos);
 
         movement.MoveDirect(buildTargetPosition);
@@ -145,7 +159,6 @@ public class Worker : MonoBehaviour
 
     private void Build()
     {
-        // sprawdzamy dystans do pozycji OBOK
         float dist = Vector2.Distance(transform.position, buildTargetPosition);
 
         if (dist > 0.5f)
@@ -157,10 +170,10 @@ public class Worker : MonoBehaviour
         if (b != null)
             b.Init(buildingToBuild);
 
-        ResetAll();
+        ResetWorkState();
     }
 
-    private void ResetAll()
+    private void ResetWorkState()
     {
         isGathering = false;
         isReturning = false;
@@ -170,13 +183,12 @@ public class Worker : MonoBehaviour
         targetDropOff = null;
         buildingToBuild = null;
 
-        carriedAmount = 0;
         gatherTimer = 0f;
     }
 
     public void StopWorkExternal()
     {
-        ResetAll();
+        ResetWorkState();
     }
 
     private Vector3 GetClosestPoint(Vector3 targetPos)
@@ -194,14 +206,14 @@ public class Worker : MonoBehaviour
 
         Vector3[] directions = new Vector3[]
         {
-        Vector3.up,
-        Vector3.down,
-        Vector3.left,
-        Vector3.right,
-        new Vector3(1,1,0).normalized,
-        new Vector3(-1,1,0).normalized,
-        new Vector3(1,-1,0).normalized,
-        new Vector3(-1,-1,0).normalized
+            Vector3.up,
+            Vector3.down,
+            Vector3.left,
+            Vector3.right,
+            new Vector3(1,1,0).normalized,
+            new Vector3(-1,1,0).normalized,
+            new Vector3(1,-1,0).normalized,
+            new Vector3(-1,-1,0).normalized
         };
 
         foreach (var dir in directions)
