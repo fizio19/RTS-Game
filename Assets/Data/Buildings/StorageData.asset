@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: StorageData
   m_EditorClassIdentifier: 
   buildingName: Storage
-  maxHealth: 80
-  buildTime: 10
+  maxHealth: 800
+  buildTime: 6
   woodCost: 60
   foodCost: 0
   stoneCost: 40

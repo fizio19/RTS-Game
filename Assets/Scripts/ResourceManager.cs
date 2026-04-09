@@ -24,10 +24,10 @@ public class ResourceManager : MonoBehaviour
     private void Start()
     {
         UpdateUI();
-        AddWood(100);
-        AddFood(50);
-        AddStone(25);
-        AddGold(10);
+        AddWood(1000);
+        AddFood(500);
+        AddStone(250);
+        AddGold(100);
     }
 
     public void AddWood(int amount)

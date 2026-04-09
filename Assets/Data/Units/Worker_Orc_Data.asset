@@ -21,4 +21,4 @@ MonoBehaviour:
   foodCost: 10
   stoneCost: 0
   goldCost: 1
-  prefab: {fileID: 0}
+  prefab: {fileID: 8102421547726540585, guid: a08f03ad499be444a9c5d7eea7c55c41, type: 3}
