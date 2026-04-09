@@ -9,6 +9,9 @@ public class UnitData : ScriptableObject
     public int carryCapacity = 10;
     public float gatherSpeed = 1f;
 
+    [Header("Praca")]
+    public float buildSpeed = 1f;
+
     [Header("Cost")]
     public int woodCost;
     public int foodCost;
