@@ -7,6 +7,10 @@ public class BuildingData : ScriptableObject
     public float maxHealth = 800f;
     public float buildTime = 2f;
 
+    [Header("Wymagania technologiczne")]
+    public bool isMainBuilding;
+    public bool requiresMainBuilding = true;
+
     [Header("Cost")]
     public int woodCost;
     public int foodCost;

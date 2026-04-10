@@ -34,21 +34,23 @@ public class BuildingPlacer : MonoBehaviour
             return;
         }
 
+        if (selectedBuilding.requiresMainBuilding && !selectedBuilding.isMainBuilding && !BuildingRegistry.HasConstructedMainBuilding())
+        {
+            CancelBuilding();
+            return;
+        }
+
         isPlacingBuilding = true;
 
         UpdatePreview();
 
         // LPM = budowanie
         if (Input.GetMouseButtonDown(0) && canBuild)
-        {
             TryPlaceBuilding();
-        }
 
         // PPM = anuluj
         if (Input.GetMouseButtonDown(1))
-        {
             CancelBuilding();
-        }
     }
 
     void UpdatePreview()
@@ -56,14 +58,14 @@ public class BuildingPlacer : MonoBehaviour
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0f;
 
-        // SNAP DO GRIDA
+        // Snap do grida.
         Vector2Int gridPos = GridManager.Instance.WorldToGrid(mousePos);
         Vector3 snappedPos = GridManager.Instance.GridToWorld(gridPos);
 
         if (previewObject == null)
         {
             previewObject = Instantiate(selectedBuilding.prefab);
-            previewRenderer = previewObject.GetComponent<SpriteRenderer>();
+            previewRenderer = previewObject.GetComponentInChildren<SpriteRenderer>();
         }
 
         previewObject.transform.position = snappedPos;
@@ -78,9 +80,9 @@ public class BuildingPlacer : MonoBehaviour
 
         canBuild = true;
 
-        foreach (var hit in hits)
+        foreach (Collider2D hit in hits)
         {
-            if (previewObject != null && hit.gameObject == previewObject)
+            if (previewObject != null && hit.transform.IsChildOf(previewObject.transform))
                 continue;
 
             if (hit.GetComponentInParent<ResourceNode>() != null ||
@@ -95,7 +97,8 @@ public class BuildingPlacer : MonoBehaviour
 
     void TryPlaceBuilding()
     {
-        if (SelectionManager.Instance.selectedUnits.Count == 0)
+        Worker worker = GetClosestSelectedWorker();
+        if (worker == null)
         {
             CancelBuilding();
             return;
@@ -114,22 +117,20 @@ public class BuildingPlacer : MonoBehaviour
             return;
         }
 
-        PlaceBuilding();
+        PlaceBuilding(worker);
     }
 
-    void PlaceBuilding()
+    void PlaceBuilding(Worker worker)
     {
         Vector3 pos = previewObject.transform.position;
 
-        foreach (UnitMovement unit in SelectionManager.Instance.selectedUnits)
-        {
-            Worker worker = unit.GetComponent<Worker>();
+        GameObject obj = Instantiate(selectedBuilding.prefab, pos, Quaternion.identity);
+        Building building = obj.GetComponent<Building>();
 
-            if (worker != null)
-            {
-                worker.StartBuilding(selectedBuilding, pos);
-            }
-        }
+        if (building != null)
+            building.StartConstruction(selectedBuilding);
+
+        worker.StartBuilding(building);
 
         CancelBuilding();
 
@@ -137,6 +138,31 @@ public class BuildingPlacer : MonoBehaviour
         inputLockFrame = Time.frameCount;
 
         Invoke(nameof(ResetPlacingFlag), 0.1f);
+    }
+
+    private Worker GetClosestSelectedWorker()
+    {
+        if (SelectionManager.Instance == null)
+            return null;
+
+        Worker bestWorker = null;
+        float bestDistance = float.MaxValue;
+
+        foreach (UnitMovement unit in SelectionManager.Instance.selectedUnits)
+        {
+            Worker worker = unit.GetComponent<Worker>();
+            if (worker == null)
+                continue;
+
+            float dist = Vector2.Distance(unit.transform.position, previewObject.transform.position);
+            if (dist < bestDistance)
+            {
+                bestDistance = dist;
+                bestWorker = worker;
+            }
+        }
+
+        return bestWorker;
     }
 
     void ResetPlacingFlag()
@@ -161,13 +187,8 @@ public class BuildingPlacer : MonoBehaviour
         if (previewRenderer == null)
             return;
 
-        if (canBuild)
-        {
-            previewRenderer.color = new Color(0, 1, 0, 0.5f);
-        }
-        else
-        {
-            previewRenderer.color = new Color(1, 0, 0, 0.5f);
-        }
+        previewRenderer.color = canBuild
+            ? new Color(0, 1, 0, 0.5f)
+            : new Color(1, 0, 0, 0.5f);
     }
 }

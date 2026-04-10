@@ -5,12 +5,17 @@ public class Worker : MonoBehaviour
     public UnitData unitData;
     public int attackDamage = 1;
 
+    [Header("Zbieranie")]
+    [SerializeField] private float gatherRange = 1.2f;
+
+    [Header("Budowanie")]
+    [SerializeField] private float buildDistanceFromOutline = 0.7f;
+    [SerializeField] private float hammerEffectInterval = 0.35f;
+    [SerializeField] private GameObject buildHammerEffectPrefab;
+
     private ResourceNode targetResource;
     private DropOffPoint targetDropOff;
-
-    private BuildingData buildingToBuild;
-    private Vector3 buildPosition;
-    private Vector3 buildTargetPosition;
+    private Building targetBuilding;
 
     private int carriedAmount;
     private ResourceType carriedType;
@@ -20,6 +25,8 @@ public class Worker : MonoBehaviour
     private bool isBuilding;
 
     private float gatherTimer;
+    private float buildEffectTimer;
+
     private float currentHealth;
 
     private UnitMovement movement;
@@ -64,16 +71,22 @@ public class Worker : MonoBehaviour
         isGathering = true;
         gatherTimer = 0f;
 
-        Vector3 targetPos = GetClosestPoint(resource.transform.position);
-        movement.MoveDirect(targetPos);
+        MoveToResourceRange();
     }
 
     private void Gather()
     {
-        float dist = Vector2.Distance(transform.position, targetResource.transform.position);
-
-        if (dist > 2.0f)
+        if (targetResource == null)
+        {
+            ResetWorkState();
             return;
+        }
+
+        if (!IsInResourceRange(targetResource))
+        {
+            MoveToResourceRange();
+            return;
+        }
 
         gatherTimer += Time.deltaTime;
 
@@ -105,7 +118,8 @@ public class Worker : MonoBehaviour
 
     private void FindDropOff()
     {
-        targetDropOff = FindObjectOfType<DropOffPoint>();
+        DropOffPoint[] points = FindObjectsOfType<DropOffPoint>();
+        targetDropOff = GetNearestActiveDropOff(points);
 
         if (targetDropOff == null)
         {
@@ -115,19 +129,32 @@ public class Worker : MonoBehaviour
 
         isReturning = true;
 
-        Vector3 targetPos = GetClosestPoint(targetDropOff.transform.position);
-        movement.MoveDirect(targetPos);
+        Vector3 targetPos = GetClosestPoint(targetDropOff.transform.position, 0.8f);
+        movement.MoveTo(targetPos);
     }
 
     private void ReturnResources()
     {
         float dist = Vector2.Distance(transform.position, targetDropOff.transform.position);
 
-        if (dist > 2.0f)
+        if (dist > 1.8f)
             return;
 
-        if (carriedType == ResourceType.Wood)
-            ResourceManager.Instance.AddWood(carriedAmount);
+        switch (carriedType)
+        {
+            case ResourceType.Wood:
+                ResourceManager.Instance.AddWood(carriedAmount);
+                break;
+            case ResourceType.Food:
+                ResourceManager.Instance.AddFood(carriedAmount);
+                break;
+            case ResourceType.Stone:
+                ResourceManager.Instance.AddStone(carriedAmount);
+                break;
+            case ResourceType.Gold:
+                ResourceManager.Instance.AddGold(carriedAmount);
+                break;
+        }
 
         carriedAmount = 0;
 
@@ -139,38 +166,76 @@ public class Worker : MonoBehaviour
 
         isReturning = false;
         isGathering = true;
-
-        Vector3 targetPos = GetClosestPoint(targetResource.transform.position);
-        movement.MoveDirect(targetPos);
+        MoveToResourceRange();
     }
 
-    public void StartBuilding(BuildingData data, Vector3 pos)
+    public void StartBuilding(Building building)
     {
+        if (building == null)
+            return;
+
         ResetWorkState();
 
-        buildingToBuild = data;
-        buildPosition = pos;
+        targetBuilding = building;
         isBuilding = true;
+        buildEffectTimer = 0f;
 
-        buildTargetPosition = GetBuildPosition(pos);
-
-        movement.MoveDirect(buildTargetPosition);
+        MoveToBuildRange();
     }
 
     private void Build()
     {
-        float dist = Vector2.Distance(transform.position, buildTargetPosition);
+        if (targetBuilding == null)
+        {
+            ResetWorkState();
+            return;
+        }
 
-        if (dist > 0.5f)
+        if (targetBuilding.IsConstructed)
+        {
+            ResetWorkState();
+            return;
+        }
+
+        Vector3 desiredBuildPos = targetBuilding.GetClosestBuildPoint(transform.position, buildDistanceFromOutline);
+
+        if (Vector2.Distance(transform.position, desiredBuildPos) > 0.35f)
+        {
+            movement.MoveDirect(desiredBuildPos);
+            return;
+        }
+
+        // Prędkość budowania jednostki, modyfikowana danymi jednostki.
+        float buildSpeed = unitData != null ? unitData.buildSpeed : 1f;
+        targetBuilding.AddBuildProgress(Time.deltaTime * buildSpeed);
+
+        buildEffectTimer += Time.deltaTime;
+        if (buildEffectTimer >= hammerEffectInterval)
+        {
+            buildEffectTimer = 0f;
+            SpawnBuildEffect();
+        }
+
+        if (targetBuilding.IsConstructed)
+            ResetWorkState();
+    }
+
+    private void SpawnBuildEffect()
+    {
+        if (buildHammerEffectPrefab == null)
             return;
 
-        GameObject obj = Instantiate(buildingToBuild.prefab, buildPosition, Quaternion.identity);
+        // Efekt uderzenia pojawia się przed pracownikiem, w kierunku budynku.
+        Vector3 direction = targetBuilding != null
+            ? (targetBuilding.transform.position - transform.position).normalized
+            : Vector3.right;
 
-        Building b = obj.GetComponent<Building>();
-        if (b != null)
-            b.Init(buildingToBuild);
+        if (direction.sqrMagnitude < 0.01f)
+            direction = Vector3.right;
 
-        ResetWorkState();
+        Vector3 effectPosition = transform.position + direction * 0.35f;
+        GameObject fx = Instantiate(buildHammerEffectPrefab, effectPosition, Quaternion.identity);
+        Destroy(fx, 0.5f);
     }
 
     private void ResetWorkState()
@@ -181,9 +246,10 @@ public class Worker : MonoBehaviour
 
         targetResource = null;
         targetDropOff = null;
-        buildingToBuild = null;
+        targetBuilding = null;
 
         gatherTimer = 0f;
+        buildEffectTimer = 0f;
     }
 
     public void StopWorkExternal()
@@ -191,49 +257,84 @@ public class Worker : MonoBehaviour
         ResetWorkState();
     }
 
-    private Vector3 GetClosestPoint(Vector3 targetPos)
+    private void MoveToBuildRange()
     {
-        Vector3 dir = (targetPos - transform.position).normalized;
-        return targetPos - dir * 0.6f;
+        if (targetBuilding == null)
+            return;
+
+        Vector3 buildPos = targetBuilding.GetClosestBuildPoint(transform.position, buildDistanceFromOutline);
+        movement.MoveTo(buildPos);
     }
 
-    Vector3 GetBuildPosition(Vector3 buildPos)
+    private void MoveToResourceRange()
     {
-        float offset = 2.0f;
+        if (targetResource == null)
+            return;
 
-        Vector3 bestPos = buildPos;
+        Vector3 targetPos = GetResourceGatherPoint(targetResource);
+        movement.MoveTo(targetPos);
+    }
+
+    private bool IsInResourceRange(ResourceNode node)
+    {
+        Collider2D col = node.GetComponentInChildren<Collider2D>();
+        if (col == null)
+            return Vector2.Distance(transform.position, node.transform.position) <= gatherRange;
+
+        Vector3 closest = col.ClosestPoint(transform.position);
+        return Vector2.Distance(transform.position, closest) <= gatherRange;
+    }
+
+    private Vector3 GetResourceGatherPoint(ResourceNode node)
+    {
+        Collider2D col = node.GetComponentInChildren<Collider2D>();
+        if (col == null)
+            return GetClosestPoint(node.transform.position, gatherRange);
+
+        Vector3 closest = col.ClosestPoint(transform.position);
+        Vector3 dir = (closest - node.transform.position).normalized;
+
+        if (dir.sqrMagnitude < 0.0001f)
+            dir = (transform.position - node.transform.position).normalized;
+
+        if (dir.sqrMagnitude < 0.0001f)
+            dir = Vector3.right;
+
+        return closest + dir * 0.25f;
+    }
+
+    private DropOffPoint GetNearestActiveDropOff(DropOffPoint[] points)
+    {
+        DropOffPoint best = null;
         float bestDist = float.MaxValue;
 
-        Vector3[] directions = new Vector3[]
+        foreach (DropOffPoint point in points)
         {
-            Vector3.up,
-            Vector3.down,
-            Vector3.left,
-            Vector3.right,
-            new Vector3(1,1,0).normalized,
-            new Vector3(-1,1,0).normalized,
-            new Vector3(1,-1,0).normalized,
-            new Vector3(-1,-1,0).normalized
-        };
-
-        foreach (var dir in directions)
-        {
-            Vector3 checkPos = buildPos + dir * offset;
-
-            Collider2D hit = Physics2D.OverlapCircle(checkPos, 0.35f, LayerMask.GetMask("Building"));
-
-            if (hit != null)
+            if (point == null || !point.enabled || !point.gameObject.activeInHierarchy)
                 continue;
 
-            float dist = Vector3.Distance(transform.position, checkPos);
+            Building building = point.GetComponent<Building>();
+            if (building != null && !building.IsConstructed)
+                continue;
 
+            float dist = Vector2.Distance(transform.position, point.transform.position);
             if (dist < bestDist)
             {
                 bestDist = dist;
-                bestPos = checkPos;
+                best = point;
             }
         }
 
-        return bestPos;
+        return best;
+    }
+
+    private Vector3 GetClosestPoint(Vector3 targetPos, float offset)
+    {
+        Vector3 dir = (targetPos - transform.position).normalized;
+
+        if (dir.sqrMagnitude < 0.0001f)
+            dir = Vector3.right;
+
+        return targetPos - dir * offset;
     }
 }
