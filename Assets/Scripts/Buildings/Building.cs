@@ -17,6 +17,7 @@ public class Building : MonoBehaviour
 
     private Collider2D cachedCollider;
     private DropOffPoint dropOffPoint;
+    private SpriteRenderer baseSpriteRenderer;
 
     public float CurrentHealth => currentHealth;
     public float MaxHealth => data != null ? data.maxHealth : 0f;
@@ -28,6 +29,7 @@ public class Building : MonoBehaviour
     {
         cachedCollider = GetComponentInChildren<Collider2D>();
         dropOffPoint = GetComponent<DropOffPoint>();
+        baseSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     private void Start()
@@ -144,15 +146,37 @@ public class Building : MonoBehaviour
         bool showRoof = buildProgress >= 0.6f;
         bool showFinal = isConstructed;
 
-        SetActiveIfAssigned(floorStage, showFloor);
-        SetActiveIfAssigned(wallsStage, showWalls);
-        SetActiveIfAssigned(roofStage, showRoof);
-        SetActiveIfAssigned(finalStage, showFinal);
+        // Etapy budowy działają tylko na obiektach ze sceny/prefabu-instancji.
+        // Referencja do assetu prefaba nie może być aktywowana/dezaktywowana w runtime.
+        SetActiveIfSceneObject(floorStage, showFloor);
+        SetActiveIfSceneObject(wallsStage, showWalls);
+        SetActiveIfSceneObject(roofStage, showRoof);
+        SetActiveIfSceneObject(finalStage, showFinal);
+
+        UpdateBaseSpriteVisibility();
     }
 
-    private void SetActiveIfAssigned(GameObject stage, bool active)
+    private void SetActiveIfSceneObject(GameObject stage, bool active)
     {
-        if (stage != null)
+        if (stage != null && stage.scene.IsValid())
             stage.SetActive(active);
+    }
+
+    private void UpdateBaseSpriteVisibility()
+    {
+        if (baseSpriteRenderer == null)
+            return;
+
+        // Gdy istnieją etapy budowy, finalny sprite pojawia się po ukończeniu.
+        // Gdy etapów brak, alpha rośnie wraz z postępem budowy.
+        bool hasSceneStages =
+            (floorStage != null && floorStage.scene.IsValid()) ||
+            (wallsStage != null && wallsStage.scene.IsValid()) ||
+            (roofStage != null && roofStage.scene.IsValid()) ||
+            (finalStage != null && finalStage.scene.IsValid());
+
+        Color color = baseSpriteRenderer.color;
+        color.a = hasSceneStages ? (isConstructed ? 1f : 0f) : Mathf.Clamp01(buildProgress);
+        baseSpriteRenderer.color = color;
     }
 }

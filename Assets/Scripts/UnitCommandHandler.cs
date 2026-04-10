@@ -49,6 +49,13 @@ public class UnitCommandHandler : MonoBehaviour
 
                 if (building != null)
                 {
+                    if (worker != null && !building.IsConstructed)
+                    {
+                        // Wspólne budowanie: każdy zaznaczony worker dodaje własną prędkość budowy.
+                        worker.StartBuilding(building);
+                        continue;
+                    }
+
                     Vector3 pos = hit.collider.ClosestPoint(unit.transform.position);
                     unit.MoveTo(pos);
 
