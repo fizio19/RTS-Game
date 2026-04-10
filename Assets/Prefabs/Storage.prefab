@@ -131,18 +131,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.3565223, y: -0.310814}
+  m_Offset: {x: 0.4365223, y: -0.450814}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.625, y: 4.34375}
+    oldSize: {x: 4.0625, y: 4.8125}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.645486, y: 3.157416}
+  m_Size: {x: 3, y: 3.8}
   m_EdgeRadius: 0
 --- !u!114 &-7096144946883814447
 MonoBehaviour:
@@ -157,3 +157,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: ee8dd183300f10541b9a2eb4a90bea8d, type: 2}
+  selectionIndicator: {fileID: 0}
+  floorStage: {fileID: 8062225461020860258, guid: 43bc21a0a6678844a8869a6814483057, type: 3}
+  wallsStage: {fileID: 8123742933189262286, guid: fbc010e77e2b5ad4989055c862e82d3e, type: 3}
+  roofStage: {fileID: 7432051286215058232, guid: af25087450c31324a83d7f1c9ab35b15, type: 3}
+  finalStage: {fileID: 744514234224711291, guid: a267f018772a713428c039d9e38939af, type: 3}

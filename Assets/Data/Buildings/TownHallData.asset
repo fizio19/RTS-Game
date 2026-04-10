@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 225d191c9fa06e444a9df3c830d41dc8, type: 3}
+  m_Name: TownHallData
+  m_EditorClassIdentifier: 
+  buildingName: Ratusz
+  maxHealth: 2000
+  buildTime: 15
+  isMainBuilding: 1
+  requiresMainBuilding: 0
+  woodCost: 100
+  foodCost: 0
+  stoneCost: 200
+  goldCost: 0
+  prefab: {fileID: 2958751117397671318, guid: cd53b17cd5a39a345aea40360d0eb00c, type: 3}

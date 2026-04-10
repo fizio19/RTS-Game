@@ -104,7 +104,7 @@
               "RelativeDocumentMoniker": "Assets\\Scripts\\UnitMovemnet.cs",
               "ToolTip": "D:\\TIBIA RTS\\Unity Project\\Tibia RTS\\Assets\\Scripts\\UnitMovemnet.cs",
               "RelativeToolTip": "Assets\\Scripts\\UnitMovemnet.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACUAAAAPAAAAAAAAAA==",
+              "ViewState": "AgIAAGkAAAAAAAAAAAAAAJcAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-01T16:22:50.41Z",
               "EditorCaption": ""
@@ -119,8 +119,7 @@
               "RelativeToolTip": "Assets\\Scripts\\Pathfinder.cs",
               "ViewState": "AgIAAGwAAAAAAAAAAAAAAKEAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-01T16:21:55.42Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-01T16:21:55.42Z"
             },
             {
               "$type": "Document",
@@ -132,8 +131,7 @@
               "RelativeToolTip": "Assets\\Scripts\\Units\\Worker.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAAMUAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-30T14:32:02.742Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-30T14:32:02.742Z"
             },
             {
               "$type": "Document",
@@ -157,8 +155,7 @@
               "RelativeToolTip": "Assets\\Scripts\\Buildings\\BuildingPlacer.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAADoAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-30T16:12:12.846Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-30T16:12:12.846Z"
             },
             {
               "$type": "Document",

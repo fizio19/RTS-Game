@@ -139,6 +139,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitData: {fileID: 11400000, guid: 91f4298712a2bff47a7e0befb6da6f84, type: 2}
   attackDamage: 1
+  gatherRange: 1.2
+  buildDistanceFromOutline: 0.7
+  hammerEffectInterval: 0.35
+  buildHammerEffectPrefab: {fileID: 5714730293212106278, guid: 75155a094dced254babd99a5dde56bc5, type: 3}
 --- !u!58 &1756796278311636480
 CircleCollider2D:
   m_ObjectHideFlags: 0
