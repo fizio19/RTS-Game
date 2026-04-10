@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class BuildingPlacer : MonoBehaviour
 {
@@ -97,8 +98,8 @@ public class BuildingPlacer : MonoBehaviour
 
     void TryPlaceBuilding()
     {
-        Worker worker = GetClosestSelectedWorker();
-        if (worker == null)
+        List<Worker> workers = GetSelectedWorkers();
+        if (workers.Count == 0)
         {
             CancelBuilding();
             return;
@@ -117,10 +118,10 @@ public class BuildingPlacer : MonoBehaviour
             return;
         }
 
-        PlaceBuilding(worker);
+        PlaceBuilding(workers);
     }
 
-    void PlaceBuilding(Worker worker)
+    void PlaceBuilding(List<Worker> workers)
     {
         Vector3 pos = previewObject.transform.position;
 
@@ -130,7 +131,9 @@ public class BuildingPlacer : MonoBehaviour
         if (building != null)
             building.StartConstruction(selectedBuilding);
 
-        worker.StartBuilding(building);
+        // Build Assist: wielu workerów może wspólnie budować ten sam obiekt.
+        foreach (Worker worker in workers)
+            worker.StartBuilding(building);
 
         CancelBuilding();
 
@@ -140,29 +143,21 @@ public class BuildingPlacer : MonoBehaviour
         Invoke(nameof(ResetPlacingFlag), 0.1f);
     }
 
-    private Worker GetClosestSelectedWorker()
+    private List<Worker> GetSelectedWorkers()
     {
-        if (SelectionManager.Instance == null)
-            return null;
+        List<Worker> workers = new List<Worker>();
 
-        Worker bestWorker = null;
-        float bestDistance = float.MaxValue;
+        if (SelectionManager.Instance == null)
+            return workers;
 
         foreach (UnitMovement unit in SelectionManager.Instance.selectedUnits)
         {
             Worker worker = unit.GetComponent<Worker>();
-            if (worker == null)
-                continue;
-
-            float dist = Vector2.Distance(unit.transform.position, previewObject.transform.position);
-            if (dist < bestDistance)
-            {
-                bestDistance = dist;
-                bestWorker = worker;
-            }
+            if (worker != null)
+                workers.Add(worker);
         }
 
-        return bestWorker;
+        return workers;
     }
 
     void ResetPlacingFlag()

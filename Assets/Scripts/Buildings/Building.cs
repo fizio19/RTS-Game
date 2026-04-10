@@ -17,6 +17,7 @@ public class Building : MonoBehaviour
 
     private Collider2D cachedCollider;
     private DropOffPoint dropOffPoint;
+    private SpriteRenderer rootRenderer;
 
     public float CurrentHealth => currentHealth;
     public float MaxHealth => data != null ? data.maxHealth : 0f;
@@ -24,10 +25,13 @@ public class Building : MonoBehaviour
     public float BuildProgress => buildProgress;
     public bool IsConstructed => isConstructed;
 
+    private bool HasStagedConstructionVisuals => floorStage != null || wallsStage != null || roofStage != null || finalStage != null;
+
     private void Awake()
     {
         cachedCollider = GetComponentInChildren<Collider2D>();
         dropOffPoint = GetComponent<DropOffPoint>();
+        rootRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Start()
@@ -37,7 +41,7 @@ public class Building : MonoBehaviour
 
         if (data != null && currentHealth <= 0f)
         {
-            // Dla budynków postawionych już jako ukończone w scenie.
+            // Budynki startowe ustawione bezpośrednio w scenie traktujemy jako ukończone.
             SetConstructedState(true);
         }
     }
@@ -56,10 +60,12 @@ public class Building : MonoBehaviour
     public void StartConstruction(BuildingData buildingData)
     {
         data = buildingData;
-        buildProgress = 0f;
-        currentHealth = 1f;
+
+        // Start od razu pokazuje podłogę placu budowy.
+        buildProgress = 0.01f;
+        currentHealth = Mathf.Max(1f, data != null ? data.maxHealth * 0.01f : 1f);
+
         SetConstructedState(false);
-        UpdateConstructionVisuals();
     }
 
     public bool AddBuildProgress(float deltaBuildTime)
@@ -139,7 +145,7 @@ public class Building : MonoBehaviour
 
     private void UpdateConstructionVisuals()
     {
-        bool showFloor = buildProgress > 0f;
+        bool showFloor = buildProgress >= 0.01f;
         bool showWalls = buildProgress >= 0.2f;
         bool showRoof = buildProgress >= 0.6f;
         bool showFinal = isConstructed;
@@ -148,6 +154,10 @@ public class Building : MonoBehaviour
         SetActiveIfAssigned(wallsStage, showWalls);
         SetActiveIfAssigned(roofStage, showRoof);
         SetActiveIfAssigned(finalStage, showFinal);
+
+        // Gdy używasz etapów jako child-obiekty, ukryj bazowy sprite do momentu ukończenia.
+        if (rootRenderer != null && HasStagedConstructionVisuals)
+            rootRenderer.enabled = isConstructed;
     }
 
     private void SetActiveIfAssigned(GameObject stage, bool active)
