@@ -14,8 +14,8 @@ TagManager:
   - Obstacle
   - Building
   - Unit
-  - 
-  - 
+  - Resource
+  - Effects
   - 
   - 
   - 
@@ -41,6 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Effects
+  - name: 
     uniqueID: 783384133
+    locked: 0
+  - name: 
+    uniqueID: 3034242481
     locked: 0

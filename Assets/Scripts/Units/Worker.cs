@@ -233,7 +233,7 @@ public class Worker : MonoBehaviour
         if (direction.sqrMagnitude < 0.01f)
             direction = Vector3.right;
 
-        Vector3 effectPosition = transform.position + direction * 0.35f;
+        Vector3 effectPosition = transform.position + direction * 1.00f;
         GameObject fx = Instantiate(buildHammerEffectPrefab, effectPosition, Quaternion.identity);
         Destroy(fx, 0.5f);
     }
